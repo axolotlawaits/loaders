@@ -1,0 +1,52 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+html{
+  --font: #374151;
+  --font-light: #6b7280;
+  --main-color: #c7d2fe;
+  --main-dark: #818cf8;
+  --hover-transition: color 0.2s ease-out;
+  overflow-y: scroll;
+  color: var(--font);
+}
+
+#root{
+  width: 100%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a{
+  color: var(--font);
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+.content{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
