@@ -4,7 +4,7 @@ import { IconClock } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 import { API } from "../constants";
 
-function Loaders({index, loadersData, handleLoadersData}) {
+function Loaders({index, loadersData, handleLoadersData, filialId}) {
   const startTimeRef = useRef<HTMLInputElement>(null)
   const [startTime, setStartTime] = useState('')
   const endTimeRef = useRef<HTMLInputElement>(null)
@@ -23,9 +23,9 @@ function Loaders({index, loadersData, handleLoadersData}) {
   );
 
   const addLoaders = async () => {
-    const response = await fetch(`${API}/routeDay/route/${routeParams.id}`, {
+    const response = await fetch(`${API}/filial/${routeParams.id}`, {
       method: 'POST',
-      body: JSON.stringify({day}),
+      body: JSON.stringify({loaders: loadersData, feedback}),
       headers: { 'Content-type': 'application/json' }
     })
   }
@@ -40,7 +40,7 @@ function Loaders({index, loadersData, handleLoadersData}) {
     handleLoadersData(e.currentTarget.value, index, isStart)
   }
 
-  console.log(loadersData)
+  console.log([filialId, index])
   return (
     <Stack gap={10}>
       <p>{`Грузчик ${index + 1}`}</p>

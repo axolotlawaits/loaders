@@ -21,13 +21,21 @@ function TruckRoute() {
   
   let rows = []
 
+  function createDateWithTime(timeString) {
+    const currentDate = new Date()
+    const newDateString = `${currentDate.toLocaleDateString()} ${timeString}`
+    const newDate = new Date(newDateString)
+
+    return newDate
+}
+
   const handleLoadersData = (data, index, isStart) => {
     if (isStart) {
       setLoadersData([
         ...loadersData.slice(0, index),
         {
           ...loadersData[index],
-          start: data
+          start: createDateWithTime(data)
         },
         ...loadersData.slice(index + 1)
       ])
@@ -36,7 +44,7 @@ function TruckRoute() {
         ...loadersData.slice(0, index),
         {
           ...loadersData[index],
-          end: data
+          end: createDateWithTime(data)
         },
         ...loadersData.slice(index + 1)
       ])
@@ -57,11 +65,12 @@ function TruckRoute() {
               <Button size="xs" variant="light" onClick={open}>добавить</Button>
               <Modal opened={opened} onClose={close}>
                 <Stack>
-                {[...Array(loadersNumber)].map((_e, i) => {
-                  return (
-                    <Loaders index={i} loadersData={loadersData} handleLoadersData={handleLoadersData}></Loaders>
-                  )
-                })}
+                  {[...Array(loadersNumber)].map((_e, i) => {
+                    console.log(i, filials[filial].name)
+                    return (
+                      <Loaders index={i} loadersData={loadersData} handleLoadersData={handleLoadersData} filialId={filials[filial].name}></Loaders>
+                    )
+                  })}
                   <Button variant="light" onClick={() => setLoadersNumber(prev => prev + 1)}>добавить грузчика</Button>
                   <TextInput 
                     label="Обратная связь" 
