@@ -43,10 +43,10 @@ a:active {
   text-decoration: none;
 }
 
-.content{
+#content{
   display: flex;
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
+  padding: 5% 15%;
 }
-

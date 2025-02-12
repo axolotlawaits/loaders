@@ -1,0 +1,43 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Route {
+  id              String          @id @default(uuid())
+  name            String          @unique
+  rrs             String
+  filials         Filial[]
+  days            RouteDay[]
+  createdAt       DateTime        @default(now())
+}
+
+model RouteDay {
+  id              String          @id @default(uuid())
+  day             DateTime        @unique
+  route           Route           @relation(fields: [routeId], references: [id])
+  routeId         String        
+  createdAt       DateTime        @default(now())
+}
+
+model Filial {
+  id              String          @id @default(uuid())
+  name            String
+  accepted        Boolean         @default(false)
+  feedback        String?
+  loaders         Loader[]
+  route           Route           @relation(fields: [routeId], references: [id])
+  routeId         String          
+}
+
+model Loader {
+  id              String          @id @default(uuid())
+  startTime       DateTime
+  endTime         DateTime
+  filial          Filial          @relation(fields: [filialId], references: [id])
+  filialId        String
+}
