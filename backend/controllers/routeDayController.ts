@@ -22,7 +22,7 @@ export const getRouteDays = asyncHandler(async (req: Request, res: Response): Pr
 
   const routeData = await prisma.routeDay.findMany({ 
     where: { routeId },
-    include: { route: { include: { filials: { include: { loaders: true }}}}}
+    include: { route: { include: { filials: { include: { loaders: { include: { filial: true}}}}}}}
   })
 
   if (routeData) {

@@ -1,92 +1,25 @@
-import { Button, Modal, Stack, Table, TextInput } from "@mantine/core"
+import { Button, Stack, Table } from "@mantine/core"
 import { DateInput } from '@mantine/dates'
-import { useDisclosure } from "@mantine/hooks"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { API } from "../constants"
 import './assets/styles/Route.css'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
-import dayjs from 'dayjs'
-import Loaders from "./Loaders"
+import DayRouteRow from "./DayRouteRow"
 
 function TruckRoute() {
   const routeParams = useParams()
-  const [opened, { open, close }] = useDisclosure(false)
   const [day, setDay] = useState<Date | null>(null)
   const [days, setDays] = useState([])
-  const [loadersNumber, setLoadersNumber] = useState(1)
-  const [feedback, setFeedback] = useState('')
-  const [loadersData, setLoadersData] = useState([])
   
   let rows = []
-
-  function createDateWithTime(timeString) {
-    const currentDate = new Date()
-    const newDateString = `${currentDate.toLocaleDateString()} ${timeString}`
-    const newDate = new Date(newDateString)
-
-    return newDate
-}
-
-  const handleLoadersData = (data, index, isStart) => {
-    if (isStart) {
-      setLoadersData([
-        ...loadersData.slice(0, index),
-        {
-          ...loadersData[index],
-          start: createDateWithTime(data)
-        },
-        ...loadersData.slice(index + 1)
-      ])
-    } else {
-      setLoadersData([
-        ...loadersData.slice(0, index),
-        {
-          ...loadersData[index],
-          end: createDateWithTime(data)
-        },
-        ...loadersData.slice(index + 1)
-      ])
-    }
-  }
 
   for (let day of days) {
     let filials = day.route.filials
 
     rows = Object.keys(filials).map(filial => (
-      <Table.Tr>
-        <Table.Td>{filials[filial].name}</Table.Td>
-        <Table.Td>
-          {filials[filial].loaders.length > 0 ? 
-            filials[filial].loaders.length
-          :
-            <>
-              <Button size="xs" variant="light" onClick={open}>добавить</Button>
-              <Modal opened={opened} onClose={close}>
-                <Stack>
-                  {[...Array(loadersNumber)].map((_e, i) => {
-                    console.log(i, filials[filial].name)
-                    return (
-                      <Loaders index={i} loadersData={loadersData} handleLoadersData={handleLoadersData} filialId={filials[filial].name}></Loaders>
-                    )
-                  })}
-                  <Button variant="light" onClick={() => setLoadersNumber(prev => prev + 1)}>добавить грузчика</Button>
-                  <TextInput 
-                    label="Обратная связь" 
-                    value={feedback} 
-                    onChange={(e) => setFeedback(e.currentTarget.value)}
-                  >
-                  </TextInput>
-                  <Button>Подтвердить</Button>
-                </Stack>
-              </Modal>
-            </>
-          }
-        </Table.Td>
-        <Table.Td>time</Table.Td>
-        <Table.Td>feedback</Table.Td>
-      </Table.Tr>
+      <DayRouteRow filials={filials} filial={filial}></DayRouteRow>
     ))
   }
 
@@ -113,7 +46,7 @@ function TruckRoute() {
       setDay(data)
     }
   }
-
+  console.log(days[0]?.route.filials[1].loaders[0].startTime)
   return (
     <div id="route-wrapper">
       <Button variant="default" onClick={open}>создать маршрут</Button>

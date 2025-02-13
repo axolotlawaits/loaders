@@ -11,9 +11,7 @@ export const addFilialData = asyncHandler(async (req: Request, res: Response): P
     data: {
       feedback,
       loaders: {
-        create: {
-          data: loaders
-        }
+        create: loaders
       }
     }
   })

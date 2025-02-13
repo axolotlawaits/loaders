@@ -1,10 +1,10 @@
-import { ActionIcon, Stack } from "@mantine/core"
+import { ActionIcon, Button, Stack } from "@mantine/core"
 import { TimeInput } from "@mantine/dates"
 import { IconClock } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 import { API } from "../constants";
 
-function Loaders({index, loadersData, handleLoadersData, filialId}) {
+function Loaders({index, loadersData, handleLoadersData}) {
   const startTimeRef = useRef<HTMLInputElement>(null)
   const [startTime, setStartTime] = useState('')
   const endTimeRef = useRef<HTMLInputElement>(null)
@@ -22,14 +22,6 @@ function Loaders({index, loadersData, handleLoadersData, filialId}) {
     </ActionIcon>
   );
 
-  const addLoaders = async () => {
-    const response = await fetch(`${API}/filial/${routeParams.id}`, {
-      method: 'POST',
-      body: JSON.stringify({loaders: loadersData, feedback}),
-      headers: { 'Content-type': 'application/json' }
-    })
-  }
-
   const updateLoadersData = (e, isStart) => {
     if (isStart) {
       setStartTime(e.currentTarget.value)
@@ -40,7 +32,6 @@ function Loaders({index, loadersData, handleLoadersData, filialId}) {
     handleLoadersData(e.currentTarget.value, index, isStart)
   }
 
-  console.log([filialId, index])
   return (
     <Stack gap={10}>
       <p>{`Грузчик ${index + 1}`}</p>
