@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useDisclosure } from "@mantine/hooks"
 import { API } from "../constants"
 import dayjs from "dayjs"
+import LoadersTimeRow from "./LoadersTimeRow"
 
 function Day({day}) {
   const [loadersNumber, setLoadersNumber] = useState(1)
@@ -84,21 +85,7 @@ function Day({day}) {
         }
       </Table.Td>
       <Table.Td>
-        {filials[filial].loaders.length > 0 ? 
-          <Button variant="outline" size="xs" onClick={open}>Посмотреть</Button>
-        :
-          <span>нет данных</span>
-        }
-        <Modal opened={opened} onClose={close}>
-          {filials[filial].loaders.length > 0 && filials[filial].loaders.map((loader, i) => {
-            return (
-              <Stack>
-                <h2>{`грузчик ${i + 1}`}</h2>
-                <p>{`время работы на филиале: ${dayjs(loader.startTime).format('H:mm')} - ${dayjs(loader.endTime).format('H:mm')}`}</p>
-              </Stack>
-            )
-          })}
-        </Modal>
+        <LoadersTimeRow loaders={filials[filial].loaders}></LoadersTimeRow>
       </Table.Td>
       <Table.Td>{filials[filial].feedback}</Table.Td>
     </Table.Tr>
