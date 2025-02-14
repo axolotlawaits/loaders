@@ -6,22 +6,12 @@ import { API } from "../constants"
 import './assets/styles/Route.css'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
-import DayRouteRow from "./DayRouteRow"
+import Day from "./Day"
 
 function TruckRoute() {
   const routeParams = useParams()
   const [day, setDay] = useState<Date | null>(null)
   const [days, setDays] = useState([])
-  
-  let rows = []
-
-  for (let day of days) {
-    let filials = day.route.filials
-
-    rows = Object.keys(filials).map(filial => (
-      <DayRouteRow filials={filials} filial={filial}></DayRouteRow>
-    ))
-  }
 
   useEffect(() => {
     const getDays = async () => {
@@ -46,7 +36,7 @@ function TruckRoute() {
       setDay(data)
     }
   }
-  console.log(days[0]?.route.filials[1].loaders[0].startTime)
+
   return (
     <div id="route-wrapper">
       <Button variant="default" onClick={open}>создать маршрут</Button>
@@ -61,20 +51,7 @@ function TruckRoute() {
       </Stack>
       {days.length > 0 && days.map(day => {
         return (
-          <div key={day.id} className="day-table">
-            <caption>{moment(day.day).format('L')}</caption>
-            <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Филиал</Table.Th>
-                  <Table.Th>Кол-во грузчиков</Table.Th>
-                  <Table.Th>Время работы</Table.Th>
-                  <Table.Th>Обратная связь</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
-          </div>
+          <Day day={day}></Day>
         )
       })}
     </div>

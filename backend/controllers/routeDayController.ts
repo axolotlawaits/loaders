@@ -6,14 +6,17 @@ export const addRouteDay = asyncHandler(async (req: Request, res: Response): Pro
   let routeId = req.params.id
   let { day } = req.body
 
-  const newRoute = await prisma.routeDay.create({
-    data: { routeId, day }
-  })
+  const routeFilials = await prisma.route.findUnique({where: {id: routeId}, select: {filials: {where: {routeDayId: null}, select: {name: true, routeId: true}}}})
 
-  if (newRoute) {
-    res.status(200).json(newRoute)
-  } else {
-    res.status(400).json({error: 'ошибка создания маршрута'})
+  if (routeFilials) {
+    const newRoute = await prisma.routeDay.create({
+      data: { routeId, day, filials: { create: routeFilials?.filials } }
+    })
+    if (newRoute) {
+      res.status(200).json(newRoute)
+    } else {
+      res.status(400).json({error: 'ошибка создания маршрута'})
+    }
   }
 })
 
@@ -22,7 +25,7 @@ export const getRouteDays = asyncHandler(async (req: Request, res: Response): Pr
 
   const routeData = await prisma.routeDay.findMany({ 
     where: { routeId },
-    include: { route: { include: { filials: { include: { loaders: { include: { filial: true}}}}}}}
+    include: { filials: { include: { loaders: { include: { filial: true }}}}, route: true}
   })
 
   if (routeData) {

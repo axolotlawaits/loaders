@@ -3,19 +3,26 @@ import Loaders from "./Loaders"
 import { useState } from "react"
 import { useDisclosure } from "@mantine/hooks"
 import { API } from "../constants"
+import dayjs from "dayjs"
 
-function DayRouteRow({filials, filial}) {
+function Day({day}) {
   const [loadersNumber, setLoadersNumber] = useState(1)
   const [feedback, setFeedback] = useState('')
   const [loadersData, setLoadersData] = useState([])
   const [opened, { open, close }] = useDisclosure(false)
 
-  function createDateWithTime(timeString) {
-    const currentDate = new Date()
-    const newDateString = `${currentDate.toLocaleDateString()} ${timeString}`
-    const newDate = new Date(newDateString)
+  let rows = []
 
-    return newDate
+  const addLoaders = async () => {
+    const response = await fetch(`${API}/filial/${filials[filial].id}`, {
+      method: 'POST',
+      body: JSON.stringify({loaders: loadersData, feedback}),
+      headers: { 'Content-type': 'application/json' }
+    })
+    const updatedFilial = await response.json()
+    if (response.ok) {
+      console.log(updatedFilial)
+    }
   }
 
   const handleLoadersData = (data, index, isStart) => {
@@ -40,19 +47,9 @@ function DayRouteRow({filials, filial}) {
     }
   }
 
-  const addLoaders = async () => {
-    const response = await fetch(`${API}/filial/${filials[filial].id}`, {
-      method: 'POST',
-      body: JSON.stringify({loaders: loadersData, feedback}),
-      headers: { 'Content-type': 'application/json' }
-    })
-    const updatedFilial = await response.json()
-    if (response.ok) {
-      console.log(updatedFilial)
-    }
-  }
-  console.log(loadersData)
-  return (
+  let filials = day.filials
+  console.log(filials)
+  rows = Object.keys(filials).map(filial => (
     <Table.Tr>
       <Table.Td>{filials[filial].name}</Table.Td>
       <Table.Td>
@@ -60,7 +57,7 @@ function DayRouteRow({filials, filial}) {
           filials[filial].loaders.length
         :
           <>
-            <Button size="xs" variant="light" onClick={open}>добавить</Button>
+            <Button size="xs" variant="outline" onClick={open}>добавить</Button>
             <Modal opened={opened} onClose={close}>
               <Stack>
                 {[...Array(loadersNumber)].map((_e, i) => {
@@ -73,7 +70,7 @@ function DayRouteRow({filials, filial}) {
                     </Loaders>
                   )
                 })}
-                <Button variant="light" onClick={() => setLoadersNumber(prev => prev + 1)}>добавить грузчика</Button>
+                <Button variant="outline" onClick={() => setLoadersNumber(prev => prev + 1)}>добавить грузчика</Button>
                 <TextInput 
                   label="Обратная связь" 
                   value={feedback} 
@@ -87,13 +84,17 @@ function DayRouteRow({filials, filial}) {
         }
       </Table.Td>
       <Table.Td>
-        <Button onClick={open}>Время работы</Button>
+        {filials[filial].loaders.length > 0 ? 
+          <Button variant="outline" size="xs" onClick={open}>Посмотреть</Button>
+        :
+          <span>нет данных</span>
+        }
         <Modal opened={opened} onClose={close}>
-          {filials[filial].loaders.length > 0 && filials[filial].loaders.map(loader => {
+          {filials[filial].loaders.length > 0 && filials[filial].loaders.map((loader, i) => {
             return (
               <Stack>
-                <h1>грузчик 1</h1>
-                <p>{`время работы на филиале: ${loader.startTime} - ${loader.endTime}`}</p>
+                <h2>{`грузчик ${i + 1}`}</h2>
+                <p>{`время работы на филиале: ${dayjs(loader.startTime).format('H:mm')} - ${dayjs(loader.endTime).format('H:mm')}`}</p>
               </Stack>
             )
           })}
@@ -101,7 +102,32 @@ function DayRouteRow({filials, filial}) {
       </Table.Td>
       <Table.Td>{filials[filial].feedback}</Table.Td>
     </Table.Tr>
+  ))
+
+  function createDateWithTime(timeString) {
+    const currentDate = new Date()
+    const newDateString = `${currentDate.toLocaleDateString()} ${timeString}`
+    const newDate = new Date(newDateString)
+
+    return newDate
+  }
+  console.log(day)
+  return (
+    <div key={day.id} className="day-table">
+      <caption>{dayjs(day.day).format('DD/MM/YYYY')}</caption>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Филиал</Table.Th>
+            <Table.Th>Кол-во грузчиков</Table.Th>
+            <Table.Th>Время работы</Table.Th>
+            <Table.Th>Обратная связь</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </Table>
+    </div>
   )
 }
 
-export default DayRouteRow
+export default Day

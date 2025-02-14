@@ -22,6 +22,7 @@ model RouteDay {
   route           Route           @relation(fields: [routeId], references: [id])
   routeId         String        
   createdAt       DateTime        @default(now())
+  filials         Filial[]
 }
 
 model Filial {
@@ -31,7 +32,9 @@ model Filial {
   feedback        String?
   loaders         Loader[]
   route           Route           @relation(fields: [routeId], references: [id])
-  routeId         String          
+  routeId         String  
+  routeDay        RouteDay?       @relation(fields: [routeDayId], references: [id])
+  routeDayId      String?        
 }
 
 model Loader {
