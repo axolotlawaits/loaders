@@ -10,5 +10,10 @@ export default defineConfig({
   preview: {
     port: 4175
   },
-  base: '/load/'
+  base: '/load/',
+  resolve: {
+    alias: {
+      '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
+    },
+  }
 })

@@ -1,7 +1,7 @@
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './Home'
-import TruckRoute from './TruckRoute'
+import RouteComponent from './RouteComponent'
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
       <div id='content'>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/route/:id' element={<TruckRoute />} />
+          <Route path='/route/:id' element={<RouteComponent />} />
         </Routes>
       </div>
     </BrowserRouter>

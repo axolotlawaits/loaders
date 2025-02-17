@@ -1,10 +1,9 @@
-import { ActionIcon, Button, Stack } from "@mantine/core"
+import { ActionIcon, Stack } from "@mantine/core"
 import { TimeInput } from "@mantine/dates"
 import { IconClock } from "@tabler/icons-react";
 import { useRef, useState } from "react";
-import { API } from "../constants";
 
-function Loaders({index, loadersData, handleLoadersData}) {
+function Loaders({index, handleLoadersData}) {
   const startTimeRef = useRef<HTMLInputElement>(null)
   const [startTime, setStartTime] = useState('')
   const endTimeRef = useRef<HTMLInputElement>(null)
@@ -14,13 +13,13 @@ function Loaders({index, loadersData, handleLoadersData}) {
     <ActionIcon variant="subtle" color="gray" onClick={() => startTimeRef.current?.showPicker()}>
       <IconClock size={16} stroke={1.5} />
     </ActionIcon>
-  );
+  )
 
   const pickerControl2 = (
     <ActionIcon variant="subtle" color="gray" onClick={() => endTimeRef.current?.showPicker()}>
       <IconClock size={16} stroke={1.5} />
     </ActionIcon>
-  );
+  )
 
   const updateLoadersData = (e, isStart) => {
     if (isStart) {

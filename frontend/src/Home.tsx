@@ -1,12 +1,10 @@
-import { Card, Button, Modal, TextInput, MultiSelect, Stack } from '@mantine/core'
+import { Card, Button, TextInput, MultiSelect, Stack } from '@mantine/core'
 import './assets/styles/Home.css'
 import { Link } from 'react-router-dom'
-import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { API } from '../constants'
 
 function Home() {
-  const [opened, { open, close }] = useDisclosure(false)
   const [name, setName] = useState('')
   const [rrs, setRrs] = useState('')
   const [filialsData, setFilialsData] = useState([])
@@ -50,7 +48,6 @@ function Home() {
   console.log(filials)
   return (
     <div id='routes-wrapper'>
-      <Button variant="default" onClick={open}>создать маршрут</Button>
       <Stack gap="md">
         <TextInput
           placeholder='наименование'

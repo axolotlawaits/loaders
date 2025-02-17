@@ -4,11 +4,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { API } from "../constants"
 import './assets/styles/Route.css'
-import moment from 'moment'
-import 'moment/dist/locale/ru'
 import Day from "./Day"
 
-function TruckRoute() {
+function RouteComponent() {
   const routeParams = useParams()
   const [day, setDay] = useState<Date | null>(null)
   const [days, setDays] = useState([])
@@ -39,7 +37,6 @@ function TruckRoute() {
 
   return (
     <div id="route-wrapper">
-      <Button variant="default" onClick={open}>создать маршрут</Button>
       <Stack gap='md'>
         <DateInput
           value={day}
@@ -60,4 +57,4 @@ function TruckRoute() {
   )
 }
 
-export default TruckRoute
+export default RouteComponent
