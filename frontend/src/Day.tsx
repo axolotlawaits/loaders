@@ -1,10 +1,11 @@
-import { Button, Modal, Stack, Table, TextInput } from "@mantine/core"
+import { Button, Modal, Space, Stack, Table, TextInput } from "@mantine/core"
 import Loaders from "./Loaders"
 import { useState } from "react"
 import { useDisclosure } from "@mantine/hooks"
 import { API } from "../constants"
 import dayjs from "dayjs"
 import LoadersTimeRow from "./LoadersTimeRow"
+import NetHours from "./NetHours"
 
 function Day({day}) {
   const [loadersNumber, setLoadersNumber] = useState(1)
@@ -14,8 +15,8 @@ function Day({day}) {
 
   let rows = []
 
-  const addLoaders = async () => {
-    const response = await fetch(`${API}/filial/${filials[filial].id}`, {
+  const addLoaders = async (filialId) => {
+    const response = await fetch(`${API}/filial/${filialId}`, {
       method: 'POST',
       body: JSON.stringify({loaders: loadersData, feedback}),
       headers: { 'Content-type': 'application/json' }
@@ -49,9 +50,9 @@ function Day({day}) {
   }
 
   let filials = day.filials
-  console.log(filials)
+
   rows = Object.keys(filials).map(filial => (
-    <Table.Tr>
+    <Table.Tr key={filials[filial].id}>
       <Table.Td>{filials[filial].name}</Table.Td>
       <Table.Td>
         {filials[filial].loaders.length > 0 ? 
@@ -64,6 +65,7 @@ function Day({day}) {
                 {[...Array(loadersNumber)].map((_e, i) => {
                   return (
                     <Loaders 
+                      key={i}
                       index={i} 
                       loadersData={loadersData} 
                       handleLoadersData={handleLoadersData} 
@@ -78,7 +80,7 @@ function Day({day}) {
                   onChange={(e) => setFeedback(e.currentTarget.value)}
                 >
                 </TextInput>
-                <Button onClick={addLoaders}>Подтвердить</Button>
+                <Button onClick={() => addLoaders(filials[filial].id)}>Подтвердить</Button>
               </Stack>
             </Modal>
           </>
@@ -98,10 +100,10 @@ function Day({day}) {
 
     return newDate
   }
-  console.log(day)
+
   return (
     <div key={day.id} className="day-table">
-      <caption>{dayjs(day.day).format('DD/MM/YYYY')}</caption>
+      <p>{dayjs(day.day).format('MMMM D, YYYY')}</p>
       <Table>
         <Table.Thead>
           <Table.Tr>
@@ -113,6 +115,8 @@ function Day({day}) {
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
+      <Space h="md" />
+      <NetHours filials={filials}></NetHours>
     </div>
   )
 }

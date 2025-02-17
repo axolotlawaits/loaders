@@ -4,8 +4,19 @@
   gap: 20px;
 }
 
+#route-days-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 .day-table{
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
 }
+

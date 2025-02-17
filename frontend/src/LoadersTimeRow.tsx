@@ -15,9 +15,10 @@ function LoadersTimeRow({loaders}) {
       <Modal opened={opened} onClose={close}>
         {loaders.length > 0 && loaders.map((loader, i) => {
           return (
-            <Stack>
+            <Stack key={loader.id}>
               <h2>{`грузчик ${i + 1}`}</h2>
               <p>{`время работы на филиале: ${dayjs(loader.startTime).format('H:mm')} - ${dayjs(loader.endTime).format('H:mm')}`}</p>
+              <p>{dayjs(loader.endTime).diff(dayjs(dayjs(loader.startTime)), 'minutes')} минут работы</p>
             </Stack>
           )
         })}

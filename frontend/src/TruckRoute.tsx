@@ -49,11 +49,13 @@ function TruckRoute() {
         />
         <Button onClick={createDay}>создать</Button>
       </Stack>
-      {days.length > 0 && days.map(day => {
-        return (
-          <Day day={day}></Day>
-        )
-      })}
+      <div id="route-days-wrapper">
+        {days.length > 0 && days.map(day => {
+          return (
+            <Day key={day.id} day={day}></Day>
+          )
+        })}
+      </div>
     </div>
   )
 }
