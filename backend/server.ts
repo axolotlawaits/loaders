@@ -9,6 +9,8 @@ import path from 'path'
 import { z } from 'zod'
 import { validateData } from './middleware/validation.js';
 import pg from 'pg'
+import { scheduleRouteDay } from './middleware/routeDayScheduler.js';
+import schedule from 'node-schedule'
 
 const app = express()
 export const prisma = new PrismaClient()
@@ -29,6 +31,8 @@ app.use('/load/route', routeRouter)
 app.use('/load/routeDay', routeDayRouter)
 app.use('/load/filial', filialRouter)
 app.use("/load", express.static(__dirname))
+
+// schedule.scheduleJob('0 0 * * *', () => scheduleRouteDay())
 
 const ldapLoginSchema = z.object({
   login: z.string().min(1, 'введите логин'),
@@ -69,6 +73,8 @@ app.get('/load/filials', async (req, res) => {
     }
   })
 })
+
+scheduleRouteDay()
 
 app.listen(5001, function() { 
   console.log('server running on port 5001')

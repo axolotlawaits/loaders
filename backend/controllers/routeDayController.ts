@@ -6,7 +6,10 @@ export const addRouteDay = asyncHandler(async (req: Request, res: Response): Pro
   let routeId = req.params.id
   let { day } = req.body
 
-  const routeFilials = await prisma.route.findUnique({where: {id: routeId}, select: {filials: {where: {routeDayId: null}, select: {name: true, routeId: true}}}})
+  const routeFilials = await prisma.route.findUnique({
+    where: {id: routeId}, 
+    select: {filials: {where: {routeDayId: null}, select: {name: true, routeId: true}}}
+  })
 
   if (routeFilials) {
     const newRoute = await prisma.routeDay.create({

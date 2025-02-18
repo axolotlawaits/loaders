@@ -20,7 +20,6 @@ function RouteComponent() {
       }
     }
     getDays()
-    
   }, [routeParams.id])
 
   const createDay = async () => {
