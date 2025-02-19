@@ -1,12 +1,14 @@
-import { Card, Button, TextInput, MultiSelect, Stack } from '@mantine/core'
+import { Card, Button, TextInput, MultiSelect, Stack, Select } from '@mantine/core'
 import './assets/styles/Home.css'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { API } from '../constants'
 
+const rrsInitData = ['Алтай', 'Барнаул', 'Кемерово', 'Новокузнецк', 'Новосибирск', 'Новосибирская область', 'Омск', 'Томск']
+
 function Home() {
   const [name, setName] = useState('')
-  const [rrs, setRrs] = useState('')
+  const [rrs, setRrs] = useState<string | null>('')
   const [filialsData, setFilialsData] = useState([])
   const [filialSearch, setFilialSearch] = useState('')
   const [filials, setFilials] = useState<string[]>([])
@@ -47,18 +49,14 @@ function Home() {
   }
   console.log(filials)
   return (
-    <div id='routes-wrapper'>
+    <div id='routes-page-wrapper'>
       <Stack gap="md">
         <TextInput
-          placeholder='наименование'
+          placeholder='Наименование'
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
         />
-        <TextInput
-          placeholder='ррс'
-          value={rrs}
-          onChange={(e) => setRrs(e.currentTarget.value)}
-        />
+        <Select data={rrsInitData} value={rrs} onChange={setRrs} placeholder='Выбрать РРС'/>
         <MultiSelect 
           data={filialsData} 
           searchValue={filialSearch} 
@@ -70,15 +68,17 @@ function Home() {
         />
         <Button onClick={createRoute}>создать</Button>
       </Stack>
-      {routes.length > 0 && routes.map(route => {
-        return (
-          <Link key={route.id} to={`/route/${route.id}`}>
-            <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <p>{route.name}</p>
-            </Card>
-          </Link>
-        )
-      })}
+      <div id='routes-wrapper'>
+        {routes.length > 0 && routes.map(route => {
+          return (
+            <Link key={route.id} to={`/route/${route.id}`}>
+              <Card shadow="sm" padding="lg" radius="md" withBorder>
+                <p>{route.name}</p>
+              </Card>
+            </Link>
+          )
+        })}
+      </div>
     </div>
   )
 }

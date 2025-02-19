@@ -43,11 +43,35 @@ a:active {
   text-decoration: none;
 }
 
-#content{
+#page{
   display: flex;
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
+}
+
+#header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  background-color: #228be6;
+  padding: 0 15%;
+}
+
+.header-link{
+  color: white;
+  font-weight: bold;
+}
+
+.header-link:hover{
+  text-decoration: underline;
+}
+
+#content{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 5% 15%;
   background-color: #F8FAFC;
 }
