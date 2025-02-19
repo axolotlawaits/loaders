@@ -1,8 +1,9 @@
 import { Button, Modal, Stack } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import dayjs from "dayjs"
+import { LoaderType } from "./Loaders"
 
-function LoadersTimeRow({loaders}) {
+function LoadersTimeRow({loaders}: {loaders: LoaderType[]}) {
   const [opened, { open, close }] = useDisclosure(false)
   
   return (

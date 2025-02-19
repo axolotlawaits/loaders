@@ -3,7 +3,18 @@ import { TimeInput } from "@mantine/dates"
 import { IconClock } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 
-function Loaders({index, handleLoadersData}) {
+export type LoaderType = {
+  id: string
+  startTime: Date
+  endTime: Date
+}
+
+type LoadersProps = {
+  index: number
+  handleLoadersData: (time: string, index: number, isStart: boolean) => void
+}
+
+function Loaders({index, handleLoadersData}: LoadersProps) {
   const startTimeRef = useRef<HTMLInputElement>(null)
   const [startTime, setStartTime] = useState('')
   const endTimeRef = useRef<HTMLInputElement>(null)
@@ -21,14 +32,14 @@ function Loaders({index, handleLoadersData}) {
     </ActionIcon>
   )
 
-  const updateLoadersData = (e, isStart) => {
+  const updateLoadersData = (time: string, isStart: boolean) => {
     if (isStart) {
-      setStartTime(e.currentTarget.value)
+      setStartTime(time)
     } else {
-      setEndTime(e.currentTarget.value)
+      setEndTime(time)
     }
     
-    handleLoadersData(e.currentTarget.value, index, isStart)
+    handleLoadersData(time, index, isStart)
   }
 
   return (
@@ -37,14 +48,14 @@ function Loaders({index, handleLoadersData}) {
       <p>Время начала</p>
       <TimeInput 
         value={startTime}
-        onChange={(e) => updateLoadersData(e, true)}
+        onChange={(e) => updateLoadersData(e.currentTarget.value, true)}
         ref={startTimeRef} 
         rightSection={pickerControl}
       />
       <p>Время конца</p>
       <TimeInput 
         value={endTime}
-        onChange={(e) => updateLoadersData(e, false)}
+        onChange={(e) => updateLoadersData(e.currentTarget.value, false)}
         ref={endTimeRef} 
         rightSection={pickerControl2}
       />

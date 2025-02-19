@@ -1,15 +1,16 @@
-import { Button, Stack, Table } from "@mantine/core"
+import { Button, Stack } from "@mantine/core"
 import { DateInput } from '@mantine/dates'
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { API } from "../constants"
 import './assets/styles/Route.css'
 import Day from "./Day"
+import { DayType } from "./Day"
 
 function RouteComponent() {
   const routeParams = useParams()
   const [day, setDay] = useState<Date | null>(null)
-  const [days, setDays] = useState([])
+  const [days, setDays] = useState<DayType[]>([])
 
   useEffect(() => {
     const getDays = async () => {

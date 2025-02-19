@@ -1,12 +1,13 @@
 import { Button, Modal } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import dayjs from "dayjs"
+import { FilialType } from "./Day"
 
-function NetHours({filials}) {
+function NetHours({filials}: {filials: FilialType[]}) {
   const [opened, { open, close }] = useDisclosure(false)  
 
   function calculateWorkHours() {
-    let obj = {}
+    let obj: Record<number, number> = {}
     for (let filial in filials) {
       for (let [index, loader] of filials[filial].loaders.entries()) {
         obj[index] = (obj[index] || 0) + dayjs(loader.endTime).diff(dayjs(dayjs(loader.startTime)), 'minutes')

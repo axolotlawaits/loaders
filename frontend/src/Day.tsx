@@ -6,16 +6,35 @@ import { API } from "../constants"
 import dayjs from "dayjs"
 import LoadersTimeRow from "./LoadersTimeRow"
 import NetHours from "./NetHours"
+import { LoaderType } from "./Loaders"
 
-function Day({day}) {
+export type FilialType = {
+  id: string
+  name: string
+  feedback?: string
+  loaders: LoaderType[]
+}
+
+export type DayType = {
+  id: string,
+  day: Date
+  filials: FilialType[]
+}
+
+type LoadersTimeDataType = {
+  startTime: Date
+  endTime: Date
+}
+
+function Day({day}: {day: DayType}) {
   const [loadersNumber, setLoadersNumber] = useState(1)
   const [feedback, setFeedback] = useState('')
-  const [loadersData, setLoadersData] = useState([])
+  const [loadersData, setLoadersData] = useState<LoadersTimeDataType[]>([])
   const [opened, { open, close }] = useDisclosure(false)
 
   let rows = []
 
-  const addLoaders = async (filialId) => {
+  const addLoaders = async (filialId: string) => {
     const response = await fetch(`${API}/filial/${filialId}`, {
       method: 'POST',
       body: JSON.stringify({loaders: loadersData, feedback}),
@@ -27,7 +46,7 @@ function Day({day}) {
     }
   }
 
-  const handleLoadersData = (data, index, isStart) => {
+  const handleLoadersData = (data: string, index: number, isStart: boolean) => {
     if (isStart) {
       setLoadersData([
         ...loadersData.slice(0, index),
@@ -51,12 +70,12 @@ function Day({day}) {
 
   let filials = day.filials
 
-  rows = Object.keys(filials).map(filial => (
-    <Table.Tr key={filials[filial].id}>
-      <Table.Td>{filials[filial].name}</Table.Td>
+  rows = Object.values(filials).map(filial => (
+    <Table.Tr key={filial.id}>
+      <Table.Td>{filial.name}</Table.Td>
       <Table.Td>
-        {filials[filial].loaders.length > 0 ? 
-          filials[filial].loaders.length
+        {filial.loaders.length > 0 ? 
+          filial.loaders.length
         :
           <>
             <Button size="xs" variant="outline" onClick={open}>добавить</Button>
@@ -67,7 +86,6 @@ function Day({day}) {
                     <Loaders 
                       key={i}
                       index={i} 
-                      loadersData={loadersData} 
                       handleLoadersData={handleLoadersData} 
                     >
                     </Loaders>
@@ -80,27 +98,27 @@ function Day({day}) {
                   onChange={(e) => setFeedback(e.currentTarget.value)}
                 >
                 </TextInput>
-                <Button onClick={() => addLoaders(filials[filial].id)}>Подтвердить</Button>
+                <Button onClick={() => addLoaders(filial.id)}>Подтвердить</Button>
               </Stack>
             </Modal>
           </>
         }
       </Table.Td>
       <Table.Td>
-        <LoadersTimeRow loaders={filials[filial].loaders}></LoadersTimeRow>
+        <LoadersTimeRow loaders={filial.loaders}></LoadersTimeRow>
       </Table.Td>
-      <Table.Td>{filials[filial].feedback}</Table.Td>
+      <Table.Td>{filial.feedback}</Table.Td>
     </Table.Tr>
   ))
 
-  function createDateWithTime(timeString) {
+  function createDateWithTime(timeString: string) {
     const currentDate = new Date()
     const newDateString = `${currentDate.toLocaleDateString()} ${timeString}`
     const newDate = new Date(newDateString)
 
     return newDate
   }
-
+  console.log(loadersData)
   return (
     <div key={day.id} className="day-table">
       <p>{dayjs(day.day).format('MMMM D, YYYY')}</p>
