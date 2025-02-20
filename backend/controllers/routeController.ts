@@ -18,7 +18,7 @@ export const addRoute = asyncHandler(async (req: Request, res: Response): Promis
 })
 
 export const getRoutes = asyncHandler(async (req: Request, res: Response): Promise<any> => {
-  const routesData = await prisma.route.findMany({})
+  const routesData = await prisma.route.findMany({include: {filials: {where: {routeDayId: null}}}})
 
   if (routesData) {
     res.status(200).json(routesData)

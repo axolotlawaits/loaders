@@ -6,6 +6,9 @@ import { MantineProvider } from '@mantine/core';
 import 'dayjs/locale/ru';
 import { DatesProvider } from '@mantine/dates'
 import '@mantine/dates/styles.css'
+import dayjs from 'dayjs';
+
+dayjs.locale('ru')
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

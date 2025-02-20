@@ -4,17 +4,21 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { API } from '../constants'
 import { useDisclosure } from '@mantine/hooks';
+import { FilialType } from './Day';
+import dayjs from 'dayjs';
 
 const rrsInitData = ['Алтай', 'Барнаул', 'Кемерово', 'Новокузнецк', 'Новосибирск', 'Новосибирская область', 'Омск', 'Томск']
 
 type RouteType = {
   id: string
   name: string
+  filials: FilialType[]
+  createdAt: string
 }
 
 function Home() {
   const [name, setName] = useState('')
-  const [rrs, setRrs] = useState<string | null>('')
+  const [rrs, setRrs] = useState<string | null>('Новосибирск')
   const [filialsData, setFilialsData] = useState([])
   const [filialSearch, setFilialSearch] = useState('')
   const [filials, setFilials] = useState<string[]>([])
@@ -34,14 +38,14 @@ function Home() {
 
   useEffect(() => {
     const getFilials = async () => {
-      const response = await fetch(`${API}/filials`)
+      const response = await fetch(`${API}/filials/${rrs}`)
       const filials = await response.json()
       if (response.ok) {
         setFilialsData(filials)
       }
     }
     getFilials()
-  }, [])
+  }, [rrs])
 
   const createRoute = async () => {
     const response = await fetch(`${API}/route`, {
@@ -54,7 +58,7 @@ function Home() {
       setRoutes(json)
     }
   }
-  console.log(filials)
+
   return (
     <div id='routes-page-wrapper'>
       <Button onClick={open}>создать новый маршрут</Button>
@@ -83,7 +87,15 @@ function Home() {
           return (
             <Link key={route.id} to={`/route/${route.id}`}>
               <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <p>{route.name}</p>
+                <h1>{route.name}</h1>
+                <div>
+                  {route.filials.map(filial => {
+                    return (
+                      <p key={filial.id}>{filial.name}</p>
+                    )
+                  })}
+                </div>
+                <span>{dayjs(route.createdAt).format('MMMM D, YYYY')}</span>
               </Card>
             </Link>
           )

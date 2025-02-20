@@ -56,14 +56,15 @@ app.post('/load/login', validateData(ldapLoginSchema), async (req: Request, res:
   })
 })
 
-app.get('/load/filials', async (req, res) => {
+app.get('/load/filials/:id', async (req, res) => {
+  const city = req.params.id
   pool.query(
     `
       SELECT "S_branch".branch
       FROM "S_branch" 
-      WHERE city = 'Новосибирск' AND branch_status IN ('Действующий', 'Новый') 
+      WHERE city = $1 AND branch_status IN ('Действующий', 'Новый') 
       AND branch_type IN ('Магазин', 'Сервиcный центр', 'Региональный цех ремонта', 'РСЦ')
-    `, 
+    `, [city], 
     (err, result) => {
     if (err) {
       console.log(err)
