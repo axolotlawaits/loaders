@@ -26,10 +26,10 @@ function NetHours({filials}: {filials: FilialType[]}) {
       <Modal opened={opened} onClose={close}>
         {calculateWorkHours().length > 0 && calculateWorkHours().map((loader, index) => {
           return (
-            <p key={index}>{`Общее время работы ${index + 1} грузчика - ${loader} минут`}</p>
+            <p key={index}>{`Общее время работы ${index + 1} грузчика - ${Math.floor(loader / 60)} часа ${loader % 60} минут`}</p>
           )
         })}
-        <p>{`Общее время работы по всем грузчикам - ${calculateTotalTime()} минут`}</p>
+        <p>{`Общее время работы по всем грузчикам - ${Math.floor(calculateTotalTime() / 60)} часа ${calculateTotalTime() % 60} минут`}</p>
       </Modal>
     </>
   )

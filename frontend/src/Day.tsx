@@ -40,9 +40,9 @@ function Day({day}: {day: DayType}) {
       body: JSON.stringify({loaders: loadersData, feedback}),
       headers: { 'Content-type': 'application/json' }
     })
-    const updatedFilial = await response.json()
+
     if (response.ok) {
-      console.log(updatedFilial)
+      close()
     }
   }
 
@@ -118,7 +118,7 @@ function Day({day}: {day: DayType}) {
 
     return newDate
   }
-  console.log(loadersData)
+
   return (
     <div key={day.id} className="day-table">
       <p>{dayjs(day.day).format('MMMM D, YYYY')}</p>
