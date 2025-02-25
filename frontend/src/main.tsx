@@ -7,6 +7,7 @@ import 'dayjs/locale/ru';
 import { DatesProvider } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import dayjs from 'dayjs';
+import { UserContextProvider } from './contexts/UserContext.tsx';
 
 dayjs.locale('ru')
 
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MantineProvider>
       <DatesProvider settings={{ locale: 'ru' }}>
-        <App />
+        <UserContextProvider>
+          <App />
+        </UserContextProvider>
       </DatesProvider>
     </MantineProvider>
   </StrictMode>,

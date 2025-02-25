@@ -33,7 +33,7 @@ function Login() {
     if (response.ok) {
       setIsLoading(false)
       login(json)
-      localStorage.setItem('user', JSON.stringify(json))
+      localStorage.setItem('loadersUser', JSON.stringify(json))
       navigate('/')
     } else {
       if (json.errors) {
@@ -62,14 +62,12 @@ function Login() {
           error={validationErrors?.pass}
           required mt="md" 
         />
-        <Button fullWidth mt="xl" onClick={loginUser} loading={isLoading} color='#818cf8'>
+        <Button fullWidth mt="xl" onClick={loginUser} loading={isLoading}>
           Войти
         </Button>
-        {window.location.host === 'dns-zs.ru' &&
-          <Button fullWidth mt="xl" onClick={() => navigate('/')} variant="outline" color='#818cf8'>
-            вернуться на сайт
-          </Button>
-        }
+        <Button fullWidth mt="xl" onClick={() => navigate('/')} variant="outline">
+          Вернуться на сайт
+        </Button>
       </Paper>
     </div>
   )

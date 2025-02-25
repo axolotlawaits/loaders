@@ -20,7 +20,7 @@ export const UserContext = createContext<UserContextTypes | undefined>(undefined
  
 export const UserContextProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(() => {
-    const value = localStorage.getItem('user')
+    const value = localStorage.getItem('loadersUser')
     if (value != null) return JSON.parse(value)
   })
 
