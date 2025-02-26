@@ -5,7 +5,7 @@ import asyncHandler from 'express-async-handler'
 export const addFilialData = asyncHandler(async (req: Request, res: Response): Promise<any> => {
   let filialId = req.params.id
   let { loaders, feedback } = req.body
-  console.log(req.body)
+
   const newRoute = await prisma.filial.update({
     where: { id: filialId },
     data: {

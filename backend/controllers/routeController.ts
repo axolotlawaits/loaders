@@ -7,10 +7,14 @@ export const addRoute = asyncHandler(async (req: Request, res: Response): Promis
   let filialsToObj = filials.map((fil: string) => ({name: fil}))
 
   const newRoute = await prisma.route.create({
-    data: { name, rrs, filials: { create: filialsToObj } }
+    data: { name, rrs, filials: { create: filialsToObj }}
   })
 
   if (newRoute) {
+    filialsToObj = filials.map((fil: string) => ({routeId: newRoute.id, name: fil}))
+    await prisma.routeDay.create({
+      data: {routeId: newRoute.id, day: new Date(), filials: { create: filialsToObj }}
+    })
     res.status(200).json(newRoute)
   } else {
     res.status(400).json({error: 'ошибка создания маршрута'})
