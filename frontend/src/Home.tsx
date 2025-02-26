@@ -22,7 +22,7 @@ function Home() {
   const [filialsData, setFilialsData] = useState([])
   const [filialSearch, setFilialSearch] = useState('')
   const [filials, setFilials] = useState<string[]>([])
-  const [routes, setRoutes] = useState([])
+  const [routes, setRoutes] = useState<RouteType[]>([])
   const [opened, { open, close }] = useDisclosure(false)
 
   useEffect(() => {
@@ -55,7 +55,8 @@ function Home() {
     })
     const json = await response.json()
     if (response.ok) {
-      setRoutes(json)
+      setRoutes([...routes, json])
+      close()
     }
   }
 

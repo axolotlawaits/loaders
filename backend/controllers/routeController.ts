@@ -7,7 +7,8 @@ export const addRoute = asyncHandler(async (req: Request, res: Response): Promis
   let filialsToObj = filials.map((fil: string) => ({name: fil}))
 
   const newRoute = await prisma.route.create({
-    data: { name, rrs, filials: { create: filialsToObj }}
+    data: { name, rrs, filials: { create: filialsToObj }},
+    include: {filials: true}
   })
 
   if (newRoute) {
