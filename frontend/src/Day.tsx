@@ -113,9 +113,8 @@ function Day({day}: {day: DayType}) {
 
   function createDateWithTime(timeString: string) {
     const currentDate = new Date()
-    const newDateString = `${currentDate.toLocaleDateString()} ${timeString}`
+    const newDateString = `${currentDate.toDateString()} ${timeString}`
     const newDate = new Date(newDateString)
-
     return newDate
   }
 

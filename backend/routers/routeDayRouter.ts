@@ -1,5 +1,5 @@
 import express from 'express'
-import { addRouteDay, getRouteDays } from '../controllers/routeDayController'
+import { addRouteDay, getRouteDays } from '../controllers/routeDayController.js'
 
 const router = express.Router()
 

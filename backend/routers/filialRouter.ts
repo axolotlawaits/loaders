@@ -1,5 +1,5 @@
 import express from 'express'
-import { addFilialData } from '../controllers/filialController'
+import { addFilialData } from '../controllers/filialController.js'
 
 const router = express.Router()
 

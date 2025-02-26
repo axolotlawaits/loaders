@@ -8,7 +8,7 @@ export default defineConfig({
     host: true
   },
   preview: {
-    port: 4175
+    port: 4177
   },
   base: '/load/',
   resolve: {

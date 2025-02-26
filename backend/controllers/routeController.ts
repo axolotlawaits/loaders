@@ -4,7 +4,7 @@ import asyncHandler from 'express-async-handler'
 
 export const addRoute = asyncHandler(async (req: Request, res: Response): Promise<any> => {
   let { name, rrs, filials } = req.body
-  let filialsToObj = filials.map(fil => ({name: fil}))
+  let filialsToObj = filials.map((fil: string) => ({name: fil}))
 
   const newRoute = await prisma.route.create({
     data: { name, rrs, filials: { create: filialsToObj } }

@@ -27,10 +27,10 @@ const __dirname = path.resolve()
   
 app.use(cors())
 app.use(express.json())
-app.use('/load/route', routeRouter)
-app.use('/load/routeDay', routeDayRouter)
-app.use('/load/filial', filialRouter)
-app.use("/load", express.static(__dirname))
+app.use('/load-api/route', routeRouter)
+app.use('/load-api/routeDay', routeDayRouter)
+app.use('/load-api/filial', filialRouter)
+app.use("/load-api", express.static(__dirname))
 
 schedule.scheduleJob('0 0 * * *', () => scheduleRouteDay())
 
@@ -39,7 +39,7 @@ const ldapLoginSchema = z.object({
   pass: z.string().min(1, 'введите пароль'),
 })
 
-app.post('/load/login', validateData(ldapLoginSchema), async (req: Request, res: Response) => {
+app.post('/load-api/login', validateData(ldapLoginSchema), async (req: Request, res: Response) => {
   const { login, pass } = req.body
   const process = spawn('python', ["./utilities/ldap.py", login, pass])
   process.stdout.on('data', data => { 
@@ -56,7 +56,7 @@ app.post('/load/login', validateData(ldapLoginSchema), async (req: Request, res:
   })
 })
 
-app.get('/load/filials/:id', async (req, res) => {
+app.get('/load-api/filials/:id', async (req, res) => {
   const city = req.params.id
   pool.query(
     `

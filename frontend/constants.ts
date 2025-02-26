@@ -1,1 +1,1 @@
-export const API = process.env.NODE_ENV === 'production' ? `https://${window.location.host}/load` : 'http://localhost:5001/load';
+export const API = process.env.NODE_ENV === 'production' ? `https://${window.location.host}/load-api` : 'http://localhost:5001/load-api';
