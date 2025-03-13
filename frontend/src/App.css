@@ -68,10 +68,6 @@ a:active {
   text-decoration: underline;
 }
 
-.header-icon{
-  filter: invert(100%) sepia(45%) saturate(234%) hue-rotate(229deg) brightness(115%) contrast(100%);
-}
-
 .header-icon:hover{
   cursor: pointer;
 }

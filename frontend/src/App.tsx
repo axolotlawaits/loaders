@@ -3,16 +3,8 @@ import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import Home from './Home'
 import RouteComponent from './RouteComponent'
 import Login from './Login'
-import { useUserContext } from './hooks/useUserContext'
-import { IconLogout } from '@tabler/icons-react'
 
 function App() {
-  const { user, logout } = useUserContext()
-
-  const onLogout = () => {
-    localStorage.removeItem('loadersUser')
-    logout()
-  }
 
   return (
     <BrowserRouter basename="/load/">
@@ -21,11 +13,7 @@ function App() {
           <div id='page'>
             <div id='header'>
               <Link to={'/'} className='header-link'>Маршруты</Link>
-              {user ?
-                <IconLogout className="header-icon" stroke={2} size={30} onClick={onLogout}/>
-              :
-                <Link to='/login' className='header-link'>Войти</Link>
-              }
+              <Link to={`https://${window.location.host}/emp`} className='header-link'>Домой</Link>
             </div>
             <div id='content'>
               <Routes>
