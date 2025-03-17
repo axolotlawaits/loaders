@@ -18,6 +18,7 @@ type RouteType = {
 
 function Home() {
   const [name, setName] = useState('')
+  const [contractor, setContractor] = useState('')
   const [rrs, setRrs] = useState<string | null>('Новосибирск')
   const [filialsData, setFilialsData] = useState([])
   const [filialSearch, setFilialSearch] = useState('')
@@ -50,7 +51,7 @@ function Home() {
   const createRoute = async () => {
     const response = await fetch(`${API}/route`, {
       method: 'POST',
-      body: JSON.stringify({name, rrs, filials}),
+      body: JSON.stringify({name, contractor, rrs, filials}),
       headers: { 'Content-type': 'application/json' }
     })
     const json = await response.json()
@@ -69,6 +70,11 @@ function Home() {
             placeholder='Наименование'
             value={name}
             onChange={(e) => setName(e.currentTarget.value)}
+          />
+          <TextInput
+            placeholder='Подрядчик'
+            value={contractor}
+            onChange={(e) => setContractor(e.currentTarget.value)}
           />
           <Select data={rrsInitData} value={rrs} onChange={setRrs} placeholder='Выбрать РРС'/>
           <MultiSelect 

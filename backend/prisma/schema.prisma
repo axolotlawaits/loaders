@@ -29,7 +29,7 @@ model RouteDay {
 model Filial {
   id              String          @id @default(uuid())
   name            String
-  place           Int             
+  place           Int?             
   accepted        Boolean         @default(false)
   feedback        String?
   loaders         Loader[]
