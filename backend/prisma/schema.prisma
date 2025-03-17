@@ -11,6 +11,7 @@ model Route {
   id              String          @id @default(uuid())
   name            String          @unique
   rrs             String
+  contractor      String
   filials         Filial[]
   days            RouteDay[]
   createdAt       DateTime        @default(now())
@@ -28,6 +29,7 @@ model RouteDay {
 model Filial {
   id              String          @id @default(uuid())
   name            String
+  place           Int             
   accepted        Boolean         @default(false)
   feedback        String?
   loaders         Loader[]
