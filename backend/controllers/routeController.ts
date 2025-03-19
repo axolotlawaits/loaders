@@ -23,7 +23,7 @@ export const addRoute = asyncHandler(async (req: Request, res: Response): Promis
 })
 
 export const getRoutes = asyncHandler(async (req: Request, res: Response): Promise<any> => {
-  const routesData = await prisma.route.findMany({include: {filials: {where: {routeDayId: null}}}})
+  const routesData = await prisma.route.findMany({include: {filials: {where: {routeDayId: null}, orderBy: {place: 'asc'}}}})
 
   if (routesData) {
     res.status(200).json(routesData)
@@ -31,3 +31,31 @@ export const getRoutes = asyncHandler(async (req: Request, res: Response): Promi
     res.status(400).json({error: 'не найдено маршрута'})
   }
 })
+
+export const updateRoute = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+  const routeId = req.params.id
+  let { name, contractor, rrs, filials } = req.body
+
+  const updatedFilials = await Promise.all(filials.map((filial: any) => {
+    return prisma.filial.update({
+        where: { id: filial.id },
+        data: {
+            place: filial.place,
+            name: filial.name,
+        }})
+  }))
+  if (updatedFilials) {
+    const updatedRoute = await prisma.route.update({
+      where: {id: routeId},
+      data: { name, contractor, rrs }
+    })
+  
+  
+    if (updatedRoute) {
+      res.status(200).json(updatedRoute)
+    } else {
+      res.status(400).json({error: 'не удалось обновить маршрут'})
+    }
+  }
+})
+

@@ -1,4 +1,4 @@
-import { Card, Button, TextInput, MultiSelect, Stack, Select, Modal } from '@mantine/core'
+import { Card, Button, TextInput, MultiSelect, Stack, Select, Modal, Divider } from '@mantine/core'
 import './assets/styles/Home.css'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react';
@@ -6,8 +6,9 @@ import { API } from '../constants'
 import { useDisclosure } from '@mantine/hooks';
 import { FilialType } from './Day';
 import dayjs from 'dayjs';
+import RouteEdit from './RouteEdit';
 
-const rrsInitData = ['Алтай', 'Барнаул', 'Кемерово', 'Новокузнецк', 'Новосибирск', 'Новосибирская область', 'Омск', 'Томск']
+export const rrsInitData = ['Алтай', 'Барнаул', 'Кемерово', 'Новокузнецк', 'Новосибирск', 'Новосибирская область', 'Омск', 'Томск']
 
 type RouteType = {
   id: string
@@ -92,9 +93,9 @@ function Home() {
       <div id='routes-wrapper'>
         {routes.length > 0 && routes.map((route: RouteType) => {
           return (
-            <Link key={route.id} to={`/route/${route.id}`}>
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <h1>{route.name}</h1>
+            <div key={route.id} >
+              <Card shadow="sm" padding="lg" radius="md" withBorder className='route-card'>
+                <Link className='card-text-link' to={`/route/${route.id}`}>{route.name}</Link>
                 <div>
                   {route.filials.map(filial => {
                     return (
@@ -102,9 +103,13 @@ function Home() {
                     )
                   })}
                 </div>
-                <span>{dayjs(route.createdAt).format('MMMM D, YYYY')}</span>
+                <Divider my="md" />
+                <div className='route-card-footer'>
+                  <span className='route-created'>{dayjs(route.createdAt).format('MMMM D, YYYY')}</span>
+                  <RouteEdit route={route} filialsData={filialsData} />
+                </div>
               </Card>
-            </Link>
+            </div>
           )
         })}
       </div>
