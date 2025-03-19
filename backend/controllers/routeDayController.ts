@@ -8,7 +8,7 @@ export const addRouteDay = asyncHandler(async (req: Request, res: Response): Pro
 
   const routeFilials = await prisma.route.findUnique({
     where: {id: routeId}, 
-    select: {filials: {where: {routeDayId: null}, select: {name: true, routeId: true}}}
+    select: {filials: {where: {routeDayId: null}, select: {name: true, routeId: true, place: true}}}
   })
 
   if (routeFilials) {
@@ -28,7 +28,7 @@ export const getRouteDays = asyncHandler(async (req: Request, res: Response): Pr
 
   const routeData = await prisma.routeDay.findMany({ 
     where: { routeId },
-    include: { filials: { include: { loaders: { include: { filial: true }}}}, route: true},
+    include: { filials: { include: { loaders: { include: { filial: true }}}, orderBy: {place: 'desc'}}, route: true},
     orderBy: {day: 'desc'}
   })
 
