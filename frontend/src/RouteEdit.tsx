@@ -11,10 +11,11 @@ function RouteEdit({route, filialsData}) {
   const [name, setName] = useState(route.name)
   const [contractor, setContractor] = useState(route.contractor)
   const [rrs, setRrs] = useState<string | null>(route.rrs)
-  const [filials, setFilials] = useState(route.filials.map((f: FilialType, index) => ({id: f.id, place: index + 1, name: f.name})))
+  const [filials, setFilials] = useState(route.filials.map((f: FilialType, index) => ({
+    id: f.id, place: index + 1, name: f.name
+  })))
 
   const updateRoute = async () => {
-    console.log(filials)
     const response = await fetch(`${API}/route/${route.id}`, {
       method: 'PATCH',
       body: JSON.stringify({name, contractor, rrs, filials}),
@@ -25,7 +26,7 @@ function RouteEdit({route, filialsData}) {
       close()
     }
   }
-  console.log(filials)
+
   return (
     <>
       <ActionIcon onClick={open} size={26} variant="default" aria-label="ActionIcon with size as a number">

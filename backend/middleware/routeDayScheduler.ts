@@ -4,7 +4,7 @@ export const scheduleRouteDay = async (): Promise<any> => {
   const allRoutes = await prisma.route.findMany({
     select: {id: true, filials: {
       where: {routeDayId: null}, 
-      select: {name: true, routeId: true}
+      select: {name: true, routeId: true, place: true}
     }}
   })
 

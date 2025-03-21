@@ -35,6 +35,7 @@ function Day({day}: {day: DayType}) {
   let rows = []
 
   const addLoaders = async (filialId: string) => {
+    console.log(filialId)
     const response = await fetch(`${API}/filial/${filialId}`, {
       method: 'POST',
       body: JSON.stringify({loaders: loadersData, feedback}),
@@ -69,7 +70,7 @@ function Day({day}: {day: DayType}) {
   }
 
   let filials = day.filials
-
+  console.log(filials)
   rows = Object.values(filials).map(filial => (
     <Table.Tr key={filial.id}>
       <Table.Td>{filial.name}</Table.Td>
@@ -98,7 +99,7 @@ function Day({day}: {day: DayType}) {
                   onChange={(e) => setFeedback(e.currentTarget.value)}
                 >
                 </TextInput>
-                <Button onClick={() => addLoaders(filial.id)}>Подтвердить</Button>
+                <Button onClick={() => addLoaders(filial.id)}>{filial.name}Подтвердить</Button>
               </Stack>
             </Modal>
           </>

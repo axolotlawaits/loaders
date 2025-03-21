@@ -2,6 +2,7 @@ import { prisma } from "../server.js"
 import { Request, Response } from "express"
 import asyncHandler from 'express-async-handler'
 
+/* logic used in scheduler, left for further purposes */
 export const addRouteDay = asyncHandler(async (req: Request, res: Response): Promise<any> => {
   let routeId = req.params.id
   let { day } = req.body
@@ -28,7 +29,7 @@ export const getRouteDays = asyncHandler(async (req: Request, res: Response): Pr
 
   const routeData = await prisma.routeDay.findMany({ 
     where: { routeId },
-    include: { filials: { include: { loaders: { include: { filial: true }}}, orderBy: {place: 'desc'}}, route: true},
+    include: { filials: { include: { loaders: { include: { filial: true }}}, orderBy: {place: 'asc'}}, route: true},
     orderBy: {day: 'desc'}
   })
 
