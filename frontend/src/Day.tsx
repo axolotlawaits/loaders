@@ -1,17 +1,15 @@
-import { Button, Modal, Space, Stack, Table, TextInput } from "@mantine/core"
-import Loaders from "./Loaders"
-import { useState } from "react"
-import { useDisclosure } from "@mantine/hooks"
-import { API } from "../constants"
+import { Button, Modal, Space, Table } from "@mantine/core"
 import dayjs from "dayjs"
 import LoadersTimeRow from "./LoadersTimeRow"
-import NetHours from "./NetHours"
 import { LoaderType } from "./Loaders"
+import AddLoadersModal from "./components/AddLoadersModal"
+import { useDisclosure } from "@mantine/hooks"
 
 export type FilialType = {
   id: string
   name: string
   feedback?: string
+  place: number
   loaders: LoaderType[]
 }
 
@@ -21,104 +19,23 @@ export type DayType = {
   filials: FilialType[]
 }
 
-type LoadersTimeDataType = {
-  startTime: Date
-  endTime: Date
-}
-
 function Day({day}: {day: DayType}) {
-  const [loadersNumber, setLoadersNumber] = useState(1)
-  const [feedback, setFeedback] = useState('')
-  const [loadersData, setLoadersData] = useState<LoadersTimeDataType[]>([])
   const [opened, { open, close }] = useDisclosure(false)
 
-  let rows = []
-
-  const addLoaders = async (filialId: string) => {
-    console.log(filialId)
-    const response = await fetch(`${API}/filial/${filialId}`, {
-      method: 'POST',
-      body: JSON.stringify({loaders: loadersData, feedback}),
-      headers: { 'Content-type': 'application/json' }
-    })
-
-    if (response.ok) {
-      close()
+  function calculateWorkHours() {
+    let obj: Record<number, number> = {}
+    for (let filial in day.filials) {
+      for (let [index, loader] of day.filials[filial].loaders.entries()) {
+        obj[index] = (obj[index] || 0) + dayjs(loader.endTime).diff(dayjs(dayjs(loader.startTime)), 'minutes')
+      }
     }
+    return Object.values(obj)
   }
 
-  const handleLoadersData = (data: string, index: number, isStart: boolean) => {
-    if (isStart) {
-      setLoadersData([
-        ...loadersData.slice(0, index),
-        {
-          ...loadersData[index],
-          startTime: createDateWithTime(data)
-        },
-        ...loadersData.slice(index + 1)
-      ])
-    } else {
-      setLoadersData([
-        ...loadersData.slice(0, index),
-        {
-          ...loadersData[index],
-          endTime: createDateWithTime(data)
-        },
-        ...loadersData.slice(index + 1)
-      ])
-    }
+  function calculateTotalTime() {
+    return calculateWorkHours().reduce((total, cur) => total + cur, 0)
   }
-
-  let filials = day.filials
-  console.log(filials)
-  rows = Object.values(filials).map(filial => (
-    <Table.Tr key={filial.id}>
-      <Table.Td>{filial.name}</Table.Td>
-      <Table.Td>
-        {filial.loaders.length > 0 ? 
-          filial.loaders.length
-        :
-          <>
-            <Button size="xs" variant="outline" onClick={open}>добавить</Button>
-            <Modal opened={opened} onClose={close}>
-              <Stack>
-                {[...Array(loadersNumber)].map((_e, i) => {
-                  return (
-                    <Loaders 
-                      key={i}
-                      index={i} 
-                      handleLoadersData={handleLoadersData} 
-                    >
-                    </Loaders>
-                  )
-                })}
-                <Button variant="outline" onClick={() => setLoadersNumber(prev => prev + 1)}>добавить грузчика</Button>
-                <TextInput 
-                  label="Обратная связь" 
-                  value={feedback} 
-                  onChange={(e) => setFeedback(e.currentTarget.value)}
-                >
-                </TextInput>
-                <Button onClick={() => addLoaders(filial.id)}>{filial.name}Подтвердить</Button>
-              </Stack>
-            </Modal>
-          </>
-        }
-      </Table.Td>
-      <Table.Td>
-        <LoadersTimeRow loaders={filial.loaders}></LoadersTimeRow>
-      </Table.Td>
-      <Table.Td>{filial.feedback}</Table.Td>
-    </Table.Tr>
-  ))
-
-  function createDateWithTime(timeString: string) {
-    const currentDate = new Date()
-    const newDateString = `${currentDate.toDateString()} ${timeString}`
-    const newDate = new Date(newDateString)
-    return newDate
-  }
-
+  
   return (
     <div key={day.id} className="day-table">
       <p>{dayjs(day.day).format('MMMM D, YYYY')}</p>
@@ -131,10 +48,37 @@ function Day({day}: {day: DayType}) {
             <Table.Th>Обратная связь</Table.Th>
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {Object.values(day.filials).map(filial => (
+            <Table.Tr key={filial.id}>
+              <Table.Td>{filial.name}</Table.Td>
+              <Table.Td>
+                {filial.loaders.length > 0 ? 
+                  filial.loaders.length
+                :
+                  <AddLoadersModal filial={filial}/>
+                }
+              </Table.Td>
+              <Table.Td>
+                <LoadersTimeRow loaders={filial.loaders}></LoadersTimeRow>
+              </Table.Td>
+              <Table.Td>{filial.feedback}</Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
       </Table>
       <Space h="md" />
-      <NetHours filials={filials}></NetHours>
+      <>
+        <Button onClick={open} variant="light">общее количество работы грузчиков</Button>
+        <Modal opened={opened} onClose={close}>
+          {calculateWorkHours().length > 0 && calculateWorkHours().map((loader, index) => {
+            return (
+              <p key={index}>{`Общее время работы ${index + 1} грузчика - ${Math.floor(loader / 60)} часа ${loader % 60} минут`}</p>
+            )
+          })}
+          <p>{`Общее время работы по всем грузчикам - ${Math.floor(calculateTotalTime() / 60)} часа ${calculateTotalTime() % 60} минут`}</p>
+        </Modal>
+      </>
     </div>
   )
 }

@@ -1,17 +1,22 @@
-import { ActionIcon, Button, Modal, MultiSelect, Select, Stack, TextInput } from "@mantine/core"
+import { ActionIcon, Button, Modal, Select, Stack, TextInput } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { IconEdit } from "@tabler/icons-react"
 import { useState } from "react"
-import { rrsInitData } from "./Home"
+import { RouteType, rrsInitData } from "./Home"
 import { FilialType } from "./Day"
 import { API } from "../constants"
 
-function RouteEdit({route, filialsData}) {
+type RouteEditProps = {
+  route: RouteType
+  filialsData: string[]
+}
+
+function RouteEdit({route, filialsData}: RouteEditProps) {
   const [opened, { open, close }] = useDisclosure(false)
   const [name, setName] = useState(route.name)
   const [contractor, setContractor] = useState(route.contractor)
   const [rrs, setRrs] = useState<string | null>(route.rrs)
-  const [filials, setFilials] = useState(route.filials.map((f: FilialType, index) => ({
+  const [filials, setFilials] = useState(route.filials.map((f: any, index: number) => ({
     id: f.id, place: index + 1, name: f.name
   })))
 
@@ -45,13 +50,13 @@ function RouteEdit({route, filialsData}) {
             onChange={(e) => setContractor(e.currentTarget.value)}
           />
           <Select data={rrsInitData} value={rrs} onChange={setRrs} placeholder='Выбрать РРС'/>
-          {route.filials.map((filial, index) => {
+          {route.filials.map((filial: FilialType, index: number) => {
             return (
               <Select
                 key={filial.id}
                 label={`филиал ${index + 1}`}
                 value={filials[index].name}
-                onChange={value => setFilials(filials.map(filial => filial.place === index + 1 ? {...filial, name: value} : filial))}
+                onChange={value => setFilials(filials.map((filial: any) => filial.place === index + 1 ? {...filial, name: value} : filial))}
                 data={filialsData}
                 searchable
               />

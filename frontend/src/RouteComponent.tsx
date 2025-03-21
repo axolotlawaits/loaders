@@ -20,18 +20,6 @@ function RouteComponent() {
     getDays()
   }, [routeParams.id])
 
-  // const createDay = async () => {
-  //   const response = await fetch(`${API}/routeDay/route/${routeParams.id}`, {
-  //     method: 'POST',
-  //     body: JSON.stringify({day}),
-  //     headers: { 'Content-type': 'application/json' }
-  //   })
-  //   const data = await response.json()
-  //   if (response.ok) {
-  //     setDay(data)
-  //   }
-  // }
-
   return (
     <div id="route-wrapper">
       <div id="route-days-wrapper">

@@ -10,10 +10,12 @@ import RouteEdit from './RouteEdit';
 
 export const rrsInitData = ['Алтай', 'Барнаул', 'Кемерово', 'Новокузнецк', 'Новосибирск', 'Новосибирская область', 'Омск', 'Томск']
 
-type RouteType = {
+export type RouteType = {
   id: string
   name: string
   filials: FilialType[]
+  contractor: string
+  rrs: string
   createdAt: string
 }
 
